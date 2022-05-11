@@ -5,8 +5,3 @@ spring:
     config:
       uri: http://localhost:8081
       enabled: true
-  cache:
-    type: redis
-  redis:
-    host: 127.0.0.1.15
-    port: 6379

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.ReactiveHashOperations;
+import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,16 @@ import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Log4j2 
+@Log4j2
 @Service
- //@ConditionalOnProperty(name = "cache.enabled", havingValue = "true")
+// @ConditionalOnProperty(name = "cache.enabled", havingValue = "true")
 public class MovementWalletServiceImpl implements MovementWalletService {
 
 	@Autowired
 	MovementWalletRepository movementWalletRepository;
-	//@Autowired
-    //private RedisTemplate<K, V> redisTemplate;
-	//  @Autowired
-	//private ReactiveHashOperations<String, Integer, MovementWallet> hashOperations;
+	@Autowired
+	ReactiveRedisOperations<String, MovementWallet> redisOperations;
+
 	@Override
 	public Flux<MovementWallet> findAll() {
 		// TODO Auto-generated method stub
@@ -40,7 +40,16 @@ public class MovementWalletServiceImpl implements MovementWalletService {
 	@Override
 	public Mono<MovementWallet> findById(Long idMovementWallet) {
 		// TODO Auto-generated method stub
-		return movementWalletRepository.findById(idMovementWallet);
+
+		return redisOperations.opsForValue().get(MovementWallet.class.getName() + idMovementWallet).map(e -> {
+			log.info("redis read:" + e.toString());
+			return e;
+		}).switchIfEmpty(movementWalletRepository.findById(idMovementWallet).map(e -> {
+			log.info("redis save:" + e.toString());
+			redisOperations.opsForValue().set(MovementWallet.class.getName() + e.getIdMovementWallet().toString(), e).subscribe();
+			return e;
+		}));
+		// return movementWalletRepository.findById(idMovementWallet);
 	}
 
 	@Override
@@ -63,13 +72,23 @@ public class MovementWalletServiceImpl implements MovementWalletService {
 		}
 		movementWallet.setIdMovementWallet(idMovementWallet + 1);
 		movementWallet.setDateModified(Calendar.getInstance().getTime());
-		return movementWalletRepository.insert(movementWallet);
+
+		return movementWalletRepository.insert(movementWallet).map(e -> {
+			log.info("redis save:" + e.toString());
+			redisOperations.opsForValue().set(MovementWallet.class.getName() + e.getIdMovementWallet().toString(), e).subscribe();
+			return e;
+		});
 	}
 
 	@Override
 	public Mono<MovementWallet> update(MovementWallet movementWallet) {
 		// TODO Auto-generated method stub
-		return movementWalletRepository.save(movementWallet);
+
+		return movementWalletRepository.save(movementWallet).map(e -> {
+			log.info("redis update:" + e.toString());
+			redisOperations.opsForValue().set(MovementWallet.class.getName() + e.getIdMovementWallet().toString(), e).subscribe();
+			return e;
+		});
 	}
 
 	@Override
