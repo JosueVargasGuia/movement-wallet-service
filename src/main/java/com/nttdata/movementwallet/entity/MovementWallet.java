@@ -30,9 +30,13 @@ public class MovementWallet {
 	private Long idMovementWallet;
 	private Long idOriginWallet;
 	private Long idDestinyWallet;
+	private Long idOriginBankAccount;
+	private Long idDestinyBankAccount;
 	private Long idCardWallet;
 	private Double amount;
 	private TypeMovement typeMovement;
+	private Long originIdMovementAccount;
+	private Long destinyIdMovementAccount;
 	private OperationStatus operationStatus;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private Date creationDate;
