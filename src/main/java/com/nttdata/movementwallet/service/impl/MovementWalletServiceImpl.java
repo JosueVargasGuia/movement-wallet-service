@@ -5,7 +5,11 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.data.redis.core.ReactiveHashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.nttdata.movementwallet.entity.MovementWallet;
 import com.nttdata.movementwallet.repository.MovementWalletRepository;
@@ -15,13 +19,17 @@ import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Log4j2
-@Component
+@Log4j2 
+@Service
+ //@ConditionalOnProperty(name = "cache.enabled", havingValue = "true")
 public class MovementWalletServiceImpl implements MovementWalletService {
 
 	@Autowired
 	MovementWalletRepository movementWalletRepository;
-
+	//@Autowired
+    //private RedisTemplate<K, V> redisTemplate;
+	//  @Autowired
+	//private ReactiveHashOperations<String, Integer, MovementWallet> hashOperations;
 	@Override
 	public Flux<MovementWallet> findAll() {
 		// TODO Auto-generated method stub
