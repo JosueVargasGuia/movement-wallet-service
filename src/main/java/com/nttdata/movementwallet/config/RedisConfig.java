@@ -15,6 +15,7 @@ import com.nttdata.movementwallet.entity.MovementWallet;
 public class RedisConfig {
 	@Bean
 	ReactiveRedisOperations<String, MovementWallet> redisOperations(ReactiveRedisConnectionFactory factory) {
+		
 		Jackson2JsonRedisSerializer<MovementWallet> serializer = new Jackson2JsonRedisSerializer<>(
 				MovementWallet.class);
 
