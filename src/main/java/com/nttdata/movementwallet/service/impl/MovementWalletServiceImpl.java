@@ -5,11 +5,7 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.nttdata.movementwallet.entity.MovementWallet;

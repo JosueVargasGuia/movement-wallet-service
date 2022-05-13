@@ -1,13 +1,11 @@
 package com.nttdata.movementwallet.consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
- 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.nttdata.movementwallet.model.TranfersResponse;
 import com.nttdata.movementwallet.service.MovementWalletService;
-import com.nttdata.wallet.model.MovementWalletResponse;
 
 import lombok.extern.log4j.Log4j2;
 

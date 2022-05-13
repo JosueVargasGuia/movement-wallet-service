@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.nttdata.movementwallet.entity.OperationStatus;
 import com.nttdata.movementwallet.entity.TypeMovement;
-import com.nttdata.wallet.model.MovementWalletResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
